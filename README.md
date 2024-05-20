@@ -108,3 +108,5 @@ touch src/admin/admin.controller.ts src/admin/admin.module.ts src/admin/admin.se
 # Crear archivos para dto
 touch src/dto/create-inventory.dto.ts src/dto/update-inventory.dto.ts src/dto/create-payment.dto.ts src/dto/update-payment.dto.ts src/dto/create-cart.dto.ts src/dto/update-cart.dto.ts src/dto/create-notification.dto.ts src/dto/update-notification.dto.ts src/dto/create-admin.dto.ts src/dto/update-admin.dto.ts
 ```
+
+##  rutas creadas 

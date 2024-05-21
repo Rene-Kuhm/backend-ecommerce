@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Order } from './order.entity';
@@ -27,6 +31,10 @@ export class OrderService {
     const { userId, items } = createOrderDto;
     const user = await this.usersService.findOne(userId);
 
+    if (!user) {
+      throw new NotFoundException(`User with ID ${userId} not found`);
+    }
+
     const orderItems = await Promise.all(
       items.map(async (item) => {
         const product = await this.productRepository.findOne({
@@ -48,9 +56,17 @@ export class OrderService {
     const order = this.orderRepository.create({
       user,
       items: orderItems,
+      totalPrice: orderItems.reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0,
+      ),
     });
 
-    return this.orderRepository.save(order);
+    try {
+      return await this.orderRepository.save(order);
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to create order');
+    }
   }
 
   async findAll(): Promise<Order[]> {
@@ -81,6 +97,10 @@ export class OrderService {
     if (!order) {
       throw new NotFoundException(`Order with ID ${id} not found`);
     }
+
+    // Eliminar manualmente los elementos de la orden antes de eliminar la orden
+    await this.orderItemRepository.delete({ order });
+
     await this.orderRepository.remove(order);
   }
 }

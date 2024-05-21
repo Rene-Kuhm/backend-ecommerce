@@ -19,10 +19,16 @@ export class Order {
   @ManyToOne(() => LocalUser, (user) => user.orders)
   user: LocalUser;
 
-  @OneToMany(() => OrderItem, (item) => item.order, { cascade: true })
+  @OneToMany(() => OrderItem, (item) => item.order, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   items: OrderItem[];
 
-  @OneToMany(() => Payment, (payment) => payment.order)
+  @OneToMany(() => Payment, (payment) => payment.order, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   payments: Payment[];
 
   @Column('decimal', { nullable: false })

@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Inventory } from './inventory.entity';
+import { InventoryItem } from './inventory-item.entity';
 import { CreateInventoryDto } from '../dto/create-inventory.dto';
 import { UpdateInventoryDto } from '../dto/update-inventory.dto';
 
@@ -10,6 +11,8 @@ export class InventoryService {
   constructor(
     @InjectRepository(Inventory)
     private inventoryRepository: Repository<Inventory>,
+    @InjectRepository(InventoryItem)
+    private inventoryItemRepository: Repository<InventoryItem>,
   ) {}
 
   async create(createInventoryDto: CreateInventoryDto): Promise<Inventory> {
@@ -46,6 +49,10 @@ export class InventoryService {
     if (!inventory) {
       throw new NotFoundException(`Inventory with ID ${id} not found`);
     }
+
+    // Eliminar manualmente los elementos del inventario antes de eliminar el inventario
+    await this.inventoryItemRepository.delete({ inventory });
+
     await this.inventoryRepository.remove(inventory);
   }
 }

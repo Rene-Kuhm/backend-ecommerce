@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { InventoryItem } from '../inventory/inventory-item.entity';
+import { InventoryItem } from './inventory-item.entity';
 
 @Entity()
 export class Inventory {
@@ -9,8 +9,9 @@ export class Inventory {
   @Column()
   name: string;
 
-  @OneToMany(() => InventoryItem, (inventoryItem) => inventoryItem.inventory, {
+  @OneToMany(() => InventoryItem, (item) => item.inventory, {
     cascade: true,
+    onDelete: 'CASCADE',
   })
   items: InventoryItem[];
 }

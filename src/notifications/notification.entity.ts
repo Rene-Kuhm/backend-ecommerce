@@ -9,9 +9,6 @@ export class Notification {
   @Column()
   message: string;
 
-  @Column({ default: false })
-  isRead: boolean;
-
   @ManyToOne(() => LocalUser, (user) => user.notifications)
   user: LocalUser;
 }

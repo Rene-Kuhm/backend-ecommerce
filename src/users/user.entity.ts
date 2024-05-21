@@ -2,6 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Cart } from '../cart/cart.entity';
 import { Notification } from 'src/notifications/notification.entity';
 import { Order } from 'src/orders/order.entity';
+import { Payment } from 'src/payments/payment.entity';
 @Entity()
 export class LocalUser {
   @PrimaryGeneratedColumn()
@@ -27,4 +28,7 @@ export class LocalUser {
 
   @OneToMany(() => Order, (order) => order.user)
   orders: Order[];
+
+  @OneToMany(() => Payment, (payment) => payment.user)
+  payments: Payment[];
 }

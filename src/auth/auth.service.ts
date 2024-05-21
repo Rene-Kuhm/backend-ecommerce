@@ -18,14 +18,15 @@ export class AuthService {
     return this.usersService.create({
       ...createUserDto,
       password: hashedPassword,
+      role: createUserDto.role, // Asegúrate de que el campo role esté presente
     });
   }
 
-  async validateUser(username: string, password: string): Promise<any> {
+  async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersService.findByUsername(username);
-    if (user && (await bcrypt.compare(password, user.password))) {
+    if (user && (await bcrypt.compare(pass, user.password))) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password: _, ...result } = user;
+      const { password, ...result } = user;
       return result;
     }
     return null;

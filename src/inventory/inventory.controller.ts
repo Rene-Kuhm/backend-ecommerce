@@ -1,36 +1,46 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Inventory } from './inventory.entity';
-import { InventoryItem } from './inventory-item.entity';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Patch,
+  Delete,
+} from '@nestjs/common';
+import { InventoryService } from './inventory.service';
 import { CreateInventoryDto } from '../dto/create-inventory.dto';
+import { UpdateInventoryDto } from '../dto/update-inventory.dto';
+import { Inventory } from './inventory.entity';
 
-@Injectable()
-export class InventoryService {
-  constructor(
-    @InjectRepository(Inventory)
-    private inventoryRepository: Repository<Inventory>,
-    @InjectRepository(InventoryItem)
-    private inventoryItemRepository: Repository<InventoryItem>,
-  ) {}
+@Controller('inventories')
+export class InventoryController {
+  constructor(private readonly inventoryService: InventoryService) {}
 
-  async create(createInventoryDto: CreateInventoryDto): Promise<Inventory> {
-    const { name, items } = createInventoryDto;
-    const inventory = new Inventory();
-    inventory.name = name;
-    inventory.items = items.map((itemDto) => {
-      const item = new InventoryItem();
-      item.productId = itemDto.productId;
-      item.quantity = itemDto.quantity;
-      item.price = itemDto.price;
-      return item;
-    });
-    return this.inventoryRepository.save(inventory);
+  @Post()
+  create(@Body() createInventoryDto: CreateInventoryDto): Promise<Inventory> {
+    return this.inventoryService.create(createInventoryDto);
   }
 
-  async findAll(): Promise<Inventory[]> {
-    return this.inventoryRepository.find({ relations: ['items'] });
+  @Get()
+  findAll(): Promise<Inventory[]> {
+    return this.inventoryService.findAll();
   }
 
-  // Additional methods for finding, updating, and deleting inventories can be added here
+  @Get(':id')
+  findOne(@Param('id') id: number): Promise<Inventory> {
+    return this.inventoryService.findOne(id);
+  }
+
+  @Patch(':id')
+  update(
+    @Param('id') id: number,
+    @Body() updateInventoryDto: UpdateInventoryDto,
+  ): Promise<Inventory> {
+    return this.inventoryService.update(id, updateInventoryDto);
+  }
+
+  @Delete(':id')
+  delete(@Param('id') id: number): Promise<void> {
+    return this.inventoryService.delete(id);
+  }
 }

@@ -4,9 +4,12 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   OneToMany,
+  BeforeInsert,
+  BeforeUpdate,
 } from 'typeorm';
 import { LocalUser } from '../users/user.entity';
 import { OrderItem } from './order-item.entity';
+import { Payment } from '../payments/payment.entity';
 
 @Entity()
 export class Order {
@@ -16,12 +19,21 @@ export class Order {
   @ManyToOne(() => LocalUser, (user) => user.orders)
   user: LocalUser;
 
-  @OneToMany(() => OrderItem, (orderItem) => orderItem.order, { cascade: true })
+  @OneToMany(() => OrderItem, (item) => item.order, { cascade: true })
   items: OrderItem[];
 
-  @Column('decimal', { precision: 10, scale: 2 })
+  @OneToMany(() => Payment, (payment) => payment.order)
+  payments: Payment[];
+
+  @Column('decimal', { nullable: false })
   totalPrice: number;
 
-  @Column()
-  status: string;
+  @BeforeInsert()
+  @BeforeUpdate()
+  calculateTotalPrice() {
+    this.totalPrice = this.items.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0,
+    );
+  }
 }

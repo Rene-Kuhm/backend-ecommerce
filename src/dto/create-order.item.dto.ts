@@ -1,15 +1,15 @@
 import { IsNotEmpty, IsNumber } from 'class-validator';
 
 export class CreateOrderItemDto {
-  @IsNotEmpty()
   @IsNumber()
+  @IsNotEmpty()
   productId: number;
 
-  @IsNotEmpty()
   @IsNumber()
+  @IsNotEmpty()
   quantity: number;
 
-  @IsNotEmpty()
   @IsNumber()
+  @IsNotEmpty()
   price: number;
 }

@@ -1,9 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { LocalUser } from './user.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
-import { UpdateUserDto } from '../dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -12,29 +11,45 @@ export class UsersService {
     private usersRepository: Repository<LocalUser>,
   ) {}
 
-  create(createUserDto: CreateUserDto): Promise<LocalUser> {
+  async create(createUserDto: CreateUserDto): Promise<LocalUser> {
     const user = this.usersRepository.create(createUserDto);
     return this.usersRepository.save(user);
   }
 
-  findAll(): Promise<LocalUser[]> {
+  async findAll(): Promise<LocalUser[]> {
     return this.usersRepository.find();
   }
 
-  findOne(id: number): Promise<LocalUser> {
-    return this.usersRepository.findOneBy({ id });
+  async findOne(id: number): Promise<LocalUser> {
+    const user = await this.usersRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+    return user;
   }
 
-  async findByUsername(username: string): Promise<LocalUser | undefined> {
-    return this.usersRepository.findOneBy({ username });
+  async update(id: number, updateUserDto: CreateUserDto): Promise<LocalUser> {
+    const user = await this.findOne(id);
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+    Object.assign(user, updateUserDto);
+    return this.usersRepository.save(user);
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto): Promise<LocalUser> {
-    await this.usersRepository.update(id, updateUserDto);
-    return this.findOne(id);
+  async delete(id: number): Promise<void> {
+    const user = await this.findOne(id);
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+    await this.usersRepository.remove(user);
   }
 
-  async remove(id: number): Promise<void> {
-    await this.usersRepository.delete(id);
+  async findByUsername(username: string): Promise<LocalUser> {
+    const user = await this.usersRepository.findOne({ where: { username } });
+    if (!user) {
+      throw new NotFoundException(`User with username ${username} not found`);
+    }
+    return user;
   }
 }

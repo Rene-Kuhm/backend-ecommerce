@@ -2,10 +2,10 @@ import {
   Controller,
   Get,
   Post,
+  Body,
+  Param,
   Patch,
   Delete,
-  Param,
-  Body,
 } from '@nestjs/common';
 import { NotificationService } from './notifications.service';
 import { CreateNotificationDto } from '../dto/create-notification.dto';
@@ -26,6 +26,11 @@ export class NotificationController {
   @Get()
   findAll(): Promise<Notification[]> {
     return this.notificationService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: number): Promise<Notification> {
+    return this.notificationService.findOne(id);
   }
 
   @Patch(':id')

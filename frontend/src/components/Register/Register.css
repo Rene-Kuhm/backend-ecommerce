@@ -1,0 +1,12 @@
+/* Example styles for Register component */
+form {
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  
+  input, select, button {
+    margin-bottom: 10px;
+  }
+  

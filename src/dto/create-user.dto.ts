@@ -15,5 +15,5 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
-  role: string; // Agregar el campo role
+  role: string;
 }

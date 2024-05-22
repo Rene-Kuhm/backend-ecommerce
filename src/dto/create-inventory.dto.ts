@@ -6,6 +6,7 @@ export class CreateInventoryDto {
   @IsString()
   name: string;
 
+  @IsNotEmpty()
   @IsArray()
   items: CreateInventoryItemDto[];
 }

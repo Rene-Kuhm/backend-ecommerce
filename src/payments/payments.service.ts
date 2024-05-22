@@ -45,6 +45,13 @@ export class PaymentService {
     return this.paymentRepository.find({ relations: ['user', 'order'] });
   }
 
+  async findOne(id: number): Promise<Payment> {
+    return this.paymentRepository.findOne({
+      where: { id },
+      relations: ['user', 'order'],
+    });
+  }
+
   async update(
     id: number,
     updatePaymentDto: UpdatePaymentDto,

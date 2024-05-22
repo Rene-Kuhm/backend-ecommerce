@@ -1,8 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Cart } from '../cart/cart.entity';
-import { Notification } from 'src/notifications/notification.entity';
-import { Order } from 'src/orders/order.entity';
-import { Payment } from 'src/payments/payment.entity';
+import { Notification } from '../notifications/notification.entity';
+import { Order } from '../orders/order.entity';
+import { Payment } from '../payments/payment.entity';
 @Entity()
 export class LocalUser {
   @PrimaryGeneratedColumn()

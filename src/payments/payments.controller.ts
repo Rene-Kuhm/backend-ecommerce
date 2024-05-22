@@ -26,6 +26,11 @@ export class PaymentController {
     return this.paymentService.findAll();
   }
 
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.paymentService.findOne(+id);
+  }
+
   @Patch(':id')
   update(
     @Param('id') id: number,

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import api from '../../api';
+import './Register.css';
 
 const Register: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -10,45 +11,55 @@ const Register: React.FC = () => {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await api.post('/auth/register', {
-        username,
-        email,
-        password,
-        role,
-      });
-      console.log('User registered successfully:', response.data);
+      const newUser = { username, email, password, role };
+      await api.post('http://localhost:3000/auth/register', newUser);
+      window.location.href = '/login';
     } catch (error) {
       console.error('Error registering user:', error);
     }
   };
 
   return (
-    <form onSubmit={handleRegister}>
+    <div className="register">
       <h2>Register</h2>
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <select value={role} onChange={(e) => setRole(e.target.value)}>
-        <option value="user">User</option>
-        <option value="admin">Admin</option>
-      </select>
-      <button type="submit">Register</button>
-    </form>
+      <form onSubmit={handleRegister}>
+        <div className="form-group">
+          <label htmlFor="username">Username</label>
+          <input
+            id="username"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="role">Role</label>
+          <select id="role" value={role} onChange={(e) => setRole(e.target.value)}>
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <button type="submit">Register</button>
+      </form>
+    </div>
   );
 };
 

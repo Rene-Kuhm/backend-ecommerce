@@ -1,5 +1,5 @@
-.register {
-    max-width: 400px;
+.edit-notification {
+    max-width: 600px;
     margin: 0 auto;
     padding: 1rem;
     background-color: #f9f9f9;
@@ -7,11 +7,12 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
-  .register h2 {
+  .edit-notification h2 {
     text-align: center;
     margin-bottom: 1rem;
   }
   
+  /* Reutiliza los estilos generales */
   .form-group {
     margin-bottom: 1rem;
   }
@@ -21,23 +22,23 @@
     margin-bottom: 0.5rem;
   }
   
-  .form-group input,
-  .form-group select {
-    width: 100%;
+  .form-group input {
+    width: calc(100% - 1rem);
     padding: 0.5rem;
+    margin-right: 1rem;
     border: 1px solid #ddd;
     border-radius: 4px;
   }
   
   button {
     display: inline-block;
-    width: 100%;
     padding: 0.5rem 1rem;
     color: #fff;
     background-color: #007bff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    margin-right: 0.5rem;
   }
   
   button:hover {

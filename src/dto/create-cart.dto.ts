@@ -5,7 +5,12 @@ export class CreateCartDto {
   @IsNotEmpty()
   @IsNumber()
   userId: number;
+  productId: number;
 
   @IsArray()
   items: CreateCartItemDto[];
+
+  @IsNotEmpty()
+  @IsNumber()
+  quantity: number;
 }

@@ -11,14 +11,17 @@ export class LocalUser {
   @Column()
   username: string;
 
-  @Column()
-  email: string;
+  @Column({ nullable: true })
+  email?: string;
 
-  @Column()
-  role: string;
+  @Column({ nullable: true })
+  role?: string;
 
   @Column()
   password: string;
+
+  @Column()
+  gender: 'male' | 'famele';
 
   @OneToMany(() => Cart, (cart) => cart.user)
   carts: Cart[];

@@ -1,12 +1,11 @@
-import { IsString, IsEmail, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty, IsEnum } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   username: string;
 
-  @IsEmail()
-  @IsNotEmpty()
+  @IsString()
   email: string;
 
   @IsString()
@@ -14,6 +13,9 @@ export class CreateUserDto {
   password: string;
 
   @IsString()
-  @IsNotEmpty()
   role: string;
+
+  @IsNotEmpty()
+  @IsEnum(['male', 'female'])
+  gender: 'male' | 'female';
 }

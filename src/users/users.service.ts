@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DeepPartial } from 'typeorm';
 import { LocalUser } from './user.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
 
@@ -12,7 +12,9 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<LocalUser> {
-    const user = this.usersRepository.create(createUserDto);
+    const user = this.usersRepository.create(
+      createUserDto as DeepPartial<LocalUser>,
+    );
     return this.usersRepository.save(user);
   }
 
@@ -45,11 +47,7 @@ export class UsersService {
     await this.usersRepository.remove(user);
   }
 
-  async findByUsername(username: string): Promise<LocalUser> {
-    const user = await this.usersRepository.findOne({ where: { username } });
-    if (!user) {
-      throw new NotFoundException(`User with username ${username} not found`);
-    }
-    return user;
+  async findByUsername(username: string): Promise<LocalUser | undefined> {
+    return this.usersRepository.findOne({ where: { username } });
   }
 }

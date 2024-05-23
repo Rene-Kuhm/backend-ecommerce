@@ -1,56 +1,82 @@
-import React, { useState, useEffect } from 'react';
-import api from '../../api';
-import './Products.css';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import {
+  Box,
+  Button,
+  Flex,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from '@chakra-ui/react';
 
 interface Product {
   id: number;
   name: string;
-  price: number;
   description: string;
+  price: number;
+  stock: number;
 }
 
-const ProductsList: React.FC = () => {
+const ProductList: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await api.get('/products');
-        setProducts(response.data);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
-    };
-
-    fetchProducts();
+    axios.get('http://localhost:3000/products').then((response) => {
+      setProducts(response.data);
+    });
   }, []);
 
-  const handleDelete = async (id: number) => {
-    try {
-      await api.delete(`/products/${id}`);
-      setProducts(products.filter(product => product.id !== id));
-    } catch (error) {
-      console.error('Error deleting product:', error);
-    }
+  const deleteProduct = (id: number) => {
+    axios.delete(`http://localhost:3000/products/${id}`).then(() => {
+      setProducts(products.filter((product) => product.id !== id));
+    });
   };
 
   return (
-    <div className="products-list">
-      <h2>Products</h2>
-      <button onClick={() => window.location.href = '/add-product'}>Add Product</button>
-      <ul>
-        {products.map(product => (
-          <li key={product.id}>
-            <h3>{product.name}</h3>
-            <p>{product.description}</p>
-            <p>${product.price.toFixed(2)}</p>
-            <button onClick={() => window.location.href = `/edit-product/${product.id}`}>Edit</button>
-            <button onClick={() => handleDelete(product.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Box>
+      <Flex justifyContent="space-between" mb="4">
+        <Button as={Link} to="/add-product" colorScheme="blue">
+          Add Product
+        </Button>
+      </Flex>
+      <Table variant="simple">
+        <Thead>
+          <Tr>
+            <Th>Name</Th>
+            <Th>Description</Th>
+            <Th>Price</Th>
+            <Th>Stock</Th>
+            <Th>Actions</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {products.map((product) => (
+            <Tr key={product.id}>
+              <Td>{product.name}</Td>
+              <Td>{product.description}</Td>
+              <Td>{product.price}</Td>
+              <Td>{product.stock}</Td>
+              <Td>
+                <Button as={Link} to={`/edit-product/${product.id}`} mr="2">
+                  Edit
+                </Button>
+                <Button
+                  onClick={() => deleteProduct(product.id)}
+                  colorScheme="red"
+                >
+                  Delete
+                </Button>
+              </Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+    </Box>
   );
 };
 
-export default ProductsList;
+export default ProductList;

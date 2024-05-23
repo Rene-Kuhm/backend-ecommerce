@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthProvider';
 import { Box, Button, FormControl, FormLabel, Input, VStack, Text } from '@chakra-ui/react';
 
-const Login: React.FC = () => {
+export const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -15,7 +15,7 @@ const Login: React.FC = () => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:3000/auth/login', { username, password });
-      const user = { username, ...response.data }; // Puedes ajustar esto según la respuesta de tu API
+      const user = response.data.user; // Asegúrate de que el backend devuelve un objeto `user` con el `gender`
       auth.login(user);
       navigate('/'); // Redirigir al dashboard
     } catch (error) {
@@ -48,5 +48,3 @@ const Login: React.FC = () => {
     </Box>
   );
 };
-
-export default Login;

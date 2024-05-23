@@ -1,5 +1,18 @@
-import React, { useState, useEffect, useContext, ReactNode } from 'react';
-import AuthContext, { AuthContextType } from './AuthContext';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+
+interface User {
+  username: string;
+  gender: 'male' | 'female';
+}
+
+export interface AuthContextType {
+  isAuthenticated: boolean;
+  user: User | null;
+  login: (user: User) => void;
+  logout: () => void;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -9,9 +22,13 @@ export const useAuth = () => {
   return context;
 };
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<AuthContextType['user'] | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -22,7 +39,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }, []);
 
-  const login = (user: AuthContextType['user']) => {
+  const login = (user: User) => {
     setIsAuthenticated(true);
     setUser(user);
     localStorage.setItem('token', 'your-token'); // Ajusta esto según tu lógica de token
@@ -43,3 +60,4 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   );
 };
 
+export default AuthContext;

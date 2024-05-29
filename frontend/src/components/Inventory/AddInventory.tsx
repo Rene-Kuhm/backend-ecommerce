@@ -83,4 +83,4 @@ const AddInventory: React.FC = () => {
   );
 };
 
-export default AddInventory;
+export default AddInventory

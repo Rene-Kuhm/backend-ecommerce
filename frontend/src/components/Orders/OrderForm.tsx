@@ -10,10 +10,12 @@ const OrderForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3000/orders', { productName, quantity });
+      const response = await axios.post('http://localhost:3000/orders', { productName, quantity });
       // Manejar la respuesta o mostrar un mensaje de éxito
+      console.log(response);
     } catch (error) {
-      // Manejar errores
+      // Manejar 
+      console.log(error);
     }
   };
 

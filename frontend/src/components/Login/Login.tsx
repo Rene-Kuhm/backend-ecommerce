@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthProvider';
+import { useAuth } from '../../context/useAuth';
 import { Box, Button, FormControl, FormLabel, Input, VStack, Text } from '@chakra-ui/react';
 
 export const Login: React.FC = () => {

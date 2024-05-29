@@ -1,4 +1,3 @@
-// src/components/Dashboard/Dashboard.tsx
 import React from 'react';
 import {
   Box,
@@ -10,64 +9,68 @@ import {
   Button,
   Avatar,
 } from '@chakra-ui/react';
-import { FiHome, FiUsers, FiBox, FiBell, FiDollarSign } from 'react-icons/fi';
+import {
+  FiHome,
+  FiUsers,
+  FiBox,
+  FiBell,
+  FiDollarSign,
+} from 'react-icons/fi';
 import { Link as RouterLink, Outlet } from 'react-router-dom';
-import { useAuth } from '../../context/AuthProvider';
+import { useAuth } from '../../context/useAuth';
 
-const Sidebar = () => {
-  return (
-    <Box
-      bg={useColorModeValue('gray.800', 'gray.900')}
-      borderRight="1px"
-      borderRightColor={useColorModeValue('gray.700', 'gray.600')}
-      w={{ base: 'full', md: 60 }}
-      pos="fixed"
-      h="full"
-      zIndex="1"
-    >
-      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontWeight="bold" color="white">
-          TDP Dashboard
-        </Text>
-      </Flex>
-      <VStack align="start" spacing="4" p="4">
-        <NavItem icon={FiHome} to="/">
-          Home
-        </NavItem>
-        <NavItem icon={FiUsers} to="/products">
-          Products
-        </NavItem>
-        <NavItem icon={FiBox}  to="/add-product" >
-          Add Product
-        </NavItem>
-        <NavItem icon={FiUsers} to="/orders">
-          Orders
-        </NavItem>
-        <NavItem icon={FiBox} to="/create-order">
-          Create Order
-        </NavItem>
-        <NavItem icon={FiBox} to="/inventories">
-          Inventory
-        </NavItem>
-        <NavItem icon={FiBox} to="/add-inventory">
-          Add Inventory
-        </NavItem>
-        <NavItem icon={FiBell} to="/notifications">
-          Notifications
-        </NavItem>
-        <NavItem icon={FiBell} to="/add-notification">
-          Add Notification
-        </NavItem>
-        <NavItem icon={FiDollarSign} to="/payments">
-          Payments
-        </NavItem>
-        <NavItem icon={FiDollarSign} to="/add-payment">
-          Add Payment
-        </NavItem>
-      </VStack>
-    </Box>
-  );
-};
+const Sidebar = () => (
+  <Box
+    bg={useColorModeValue('gray.800', 'gray.900')}
+    borderRight="1px"
+    borderRightColor={useColorModeValue('gray.700', 'gray.600')}
+    w={{ base: 'full', md: 60 }}
+    pos="fixed"
+    h="full"
+    zIndex="1"
+  >
+    <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
+      <Text fontSize="2xl" fontWeight="bold" color="white">
+        TDP Dashboard
+      </Text>
+    </Flex>
+    <VStack align="start" spacing="4" p="4">
+      <NavItem icon={FiHome} to="/">
+        Home
+      </NavItem>
+      <NavItem icon={FiUsers} to="/products">
+        Products
+      </NavItem>
+      <NavItem icon={FiBox} to="/add-product">
+        Add Product
+      </NavItem>
+      <NavItem icon={FiUsers} to="/orders">
+        Orders
+      </NavItem>
+      <NavItem icon={FiBox} to="/create-order">
+        Create Order
+      </NavItem>
+      <NavItem icon={FiBox} to="/inventories">
+        Inventory
+      </NavItem>
+      <NavItem icon={FiBox} to="/add-inventory">
+        Add Inventory
+      </NavItem>
+      <NavItem icon={FiBell} to="/notifications">
+        Notifications
+      </NavItem>
+      <NavItem icon={FiBell} to="/add-notification">
+        Add Notification
+      </NavItem>
+      <NavItem icon={FiDollarSign} to="/payments">
+        Payments
+      </NavItem>
+      <NavItem icon={FiDollarSign} to="/add-payment">
+        Add Payment
+      </NavItem>
+    </VStack>
+  </Box>
+);
 
 const NavItem = ({
   icon,
@@ -77,27 +80,25 @@ const NavItem = ({
   icon: React.ElementType;
   children: React.ReactNode;
   to: string;
-}) => {
-  return (
-    <Link
-      as={RouterLink}
-      to={to}
-      style={{ textDecoration: 'none', width: '100%' }}
+}) => (
+  <Link
+    as={RouterLink}
+    to={to}
+    style={{ textDecoration: 'none', width: '100%' }}
+  >
+    <Flex
+      align="center"
+      p="2"
+      mx="4"
+      borderRadius="md"
+      _hover={{ bg: 'gray.700', cursor: 'pointer' }}
+      color="white"
     >
-      <Flex
-        align="center"
-        p="2"
-        mx="4"
-        borderRadius="md"
-        _hover={{ bg: 'gray.700', cursor: 'pointer' }}
-        color="white"
-      >
-        {icon && <Box as={icon} mr="4" fontSize="16" />}
-        {children}
-      </Flex>
-    </Link>
-  );
-};
+      {icon && <Box as={icon} mr="4" fontSize="16" />}
+      {children}
+    </Flex>
+  </Link>
+);
 
 const Dashboard: React.FC = () => {
   const auth = useAuth();

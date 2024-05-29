@@ -8,6 +8,14 @@ interface InventoryItem {
   price: number;
 }
 
+// Definir una interfaz para el error extendido que incluye `response`
+interface AxiosError extends Error {
+  response?: {
+    status: number;
+    statusText: string;
+  };
+}
+
 const AddInventory: React.FC = () => {
   const [name, setName] = useState('');
   const [items, setItems] = useState<InventoryItem[]>([{ productId: 0, quantity: 0, price: 0 }]);
@@ -30,10 +38,20 @@ const AddInventory: React.FC = () => {
     e.preventDefault();
     try {
       const newInventory = { name, items };
-      await api.post('/inventories', newInventory);
-      window.location.href = '/inventories';
+      const response = await api.post('/inventories', newInventory);
+      if (response.status === 200 || response.status === 201) {
+        window.location.href = '/inventories';
+      } else {
+        console.error('Error adding inventory:', response.statusText);
+      }
     } catch (error) {
-      console.error('Error adding inventory:', error);
+      const axiosError = error as AxiosError;
+      if (axiosError.response && axiosError.response.status === 401) {
+        // Redirigir a la página de inicio de sesión si el usuario no está autenticado
+        window.location.href = '/login';
+      } else {
+        console.error('Error adding inventory:', axiosError.message);
+      }
     }
   };
 
@@ -51,7 +69,7 @@ const AddInventory: React.FC = () => {
           />
         </div>
         {items.map((item, index) => (
-          <div key={index} className="form-group">
+          <div key={index} className="form-group item-group">
             <label htmlFor={`productId-${index}`}>Product ID</label>
             <input
               id={`productId-${index}`}
@@ -73,14 +91,14 @@ const AddInventory: React.FC = () => {
               value={item.price}
               onChange={(e) => handleItemChange(index, 'price', Number(e.target.value))}
             />
-            <button type="button" onClick={() => handleRemoveItem(index)}>Remove</button>
+            <button type="button" className="remove-button" onClick={() => handleRemoveItem(index)}>Remove</button>
           </div>
         ))}
-        <button type="button" onClick={handleAddItem}>Add Item</button>
-        <button type="submit">Add Inventory</button>
+        <button type="button" className="add-button" onClick={handleAddItem}>Add Item</button>
+        <button type="submit" className="submit-button">Add Inventory</button>
       </form>
     </div>
   );
 };
 
-export default AddInventory
+export default AddInventory;

@@ -51,7 +51,7 @@ export const PieChartComponent = () => (
       fill="#8884d8"
       dataKey="uv"
     >
-      {data.map((entry, index) => (
+      {data.map(( index ) => (
         <Cell key={`cell-${index}`} fill="#82ca9d" />
       ))}
     </Pie>
